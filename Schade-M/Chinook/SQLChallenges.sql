@@ -9,39 +9,102 @@
     
 
 -- On the Chinook DB, practice writing queries with the following exercises
-
+USE Chinook;
+GO;
 -- BASIC CHALLENGES
 -- List all customers (full name, customer id, and country) who are not in the USA
+SELECT TABLE_NAME
+FROM INFORMATION_SCHEMA.TABLES
+WHERE TABLE_TYPE = 'BASE TABLE';
 
+SELECT CustomerId, FirstName, LastName, Country FROM Customer WHERE Country <> 'USA';
 -- List all customers from Brazil
-    
+SELECT CustomerId,
+       FirstName + ' ' + LastName AS FullName,
+       Country
+FROM Customer
+WHERE Country = 'Brazil';
 -- List all sales agents
-
+SELECT EmployeeId,
+       FirstName + ' ' + LastName AS FullName,
+       Title
+FROM Employee
+WHERE Title = 'Sales Support Agent';
 -- Retrieve a list of all countries in billing addresses on invoices
-
+SELECT DISTINCT BillingCountry
+FROM Invoice
+ORDER BY BillingCountry;
 -- Retrieve how many invoices there were in 2009, and what was the sales total for that year?
-
+SELECT COUNT(*) AS InvoiceCount,
+       SUM(Total) AS TotalSales
+FROM Invoice
+WHERE YEAR(InvoiceDate) = 2009;
     -- (challenge: find the invoice count sales total for every year using one query)
-
+SELECT YEAR(InvoiceDate) AS Year,
+       COUNT(*) AS InvoiceCount,
+       SUM(Total) AS TotalSales
+FROM Invoice
+GROUP BY YEAR(InvoiceDate)
+ORDER BY Year;
 -- how many line items were there for invoice #37
+SELECT COUNT(*) AS LineItemCount FROM InvoiceLine WHERE InvoiceId = 37;
 
 -- how many invoices per country? BillingCountry  # of invoices -
+SELECT BillingCountry, COUNT(*) AS InvoiceCount
+FROM Invoice
+GROUP BY BillingCountry
+ORDER BY InvoiceCount DESC;
 
 -- Retrieve the total sales per country, ordered by the highest total sales first.
-
+SELECT BillingCountry, SUM(Total) AS TotalSales
+FROM Invoice
+GROUP BY BillingCountry
+ORDER BY TotalSales DESC;
 
 -- JOINS CHALLENGES
 -- Every Album by Artist
 
--- All songs of the rock genre
+SELECT Album.Title, Artist.Name from Album inner join Artist on Album.ArtistId = Artist.ArtistId
 
+-- All songs of the rock genre
+SELECT t.TrackId,
+       t.Name AS TrackName,
+       g.Name AS Genre
+FROM Track t
+JOIN Genre g ON t.GenreId = g.GenreId
+WHERE g.Name = 'Rock';
 -- Show all invoices of customers from brazil (mailing address not billing)
+SELECT i.InvoiceId,
+       i.InvoiceDate,
+       i.Total,
+       c.FirstName + ' ' + c.LastName AS CustomerName,
+       c.Country AS MailingCountry
+FROM Invoice i
+JOIN Customer c ON i.CustomerId = c.CustomerId
+WHERE c.Country = 'Brazil';
 
 -- Show all invoices together with the name of the sales agent for each one
-
+SELECT i.InvoiceId, i.InvoiceDate, i.Total, e.FirstName + ' ' + e.LastName AS SalesAgent
+FROM Invoice i
+JOIN Customer c ON i.CustomerId = c.CustomerId
+JOIN Employee e ON c.SupportRepId = e.EmployeeId
+WHERE e.Title = 'Sales Support Agent';
 -- Which sales agent made the most sales in 2009?
+SELECT TOP 1
+       e.FirstName + ' ' + e.LastName AS SalesAgent,
+       SUM(i.Total) AS TotalSales
+FROM Invoice i
+JOIN Customer c ON i.CustomerId = c.CustomerId
+JOIN Employee e ON c.SupportRepId = e.EmployeeId
+WHERE YEAR(i.InvoiceDate) = 2009
+GROUP BY e.EmployeeId, e.FirstName, e.LastName
+ORDER BY SUM(i.Total) DESC;
+
 
 -- How many customers are assigned to each sales agent?
+SELECT count(CustomerId) AS Customers, Employee.FirstName + ' ' + Employee.LastName AS SalesAgent
+FROM Employee
+INNER JOIN Customer ON Customer.SupportRepId = Employee.EmployeeId GROUP BY Employee.FirstName, Employee.LastName
 
 -- Which track was purchased the most ing 20010?
 
