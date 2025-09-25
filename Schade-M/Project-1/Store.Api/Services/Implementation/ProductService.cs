@@ -15,6 +15,13 @@ namespace Store.Services
         public async Task<List<Product>> GetAllAsync() => await _repo.GetAllAsync();
         
         public async Task<Product?> GetByIdAsync(int id) => await _repo.GetByIdAsync(id);
+
+        public async Task DeleteAsync(Product product)
+        {
+            await _repo.DeleteAsync(product);
+            await _repo.SaveChangesAsync();
+        }
+
         
         public async Task CreateAsync(Product product)
         {

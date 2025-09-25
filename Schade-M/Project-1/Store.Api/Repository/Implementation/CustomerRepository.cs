@@ -21,7 +21,11 @@ namespace Store.Repositories
         public async Task<Customer?> GetByIdAsync(int id)
         {
             //return await _context.Customer.Where( student => student.id  == id);
-            throw new NotImplementedException();
+            //return await _context.Products();
+            //throw new NotImplementedException();
+            return await _context.Customers
+                        .Include(c => c.Orders) 
+                        .FirstOrDefaultAsync(c => c.Id == id); 
         }
 
         public async Task AddAsync(Customer customer)

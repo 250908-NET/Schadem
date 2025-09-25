@@ -24,13 +24,19 @@ namespace Store.Repositories
             //return await _context.Products.FirstOrDefaultAsync(p => p.ProductId == id);
             //throw new NotImplementedException();
             return await _context.Products
-                        .Include(p => p.Orders) // optional, only if you want orders loaded
-                        .FirstOrDefaultAsync(p => p.ProductId == id); // match the PK
+                        .Include(p => p.Orders) 
+                        .FirstOrDefaultAsync(p => p.ProductId == id); 
         }
 
         public async Task AddAsync(Product product)
         {
             await _context.Products.AddAsync(product);
+        }
+
+        public async Task DeleteAsync(Product product)
+        {
+            _context.Products.Remove(product);
+            await Task.CompletedTask; 
         }
 
         public async Task SaveChangesAsync()
