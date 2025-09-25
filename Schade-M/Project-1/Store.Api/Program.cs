@@ -65,6 +65,13 @@ app.MapGet("/products/{id}", async (IProductService service, int id) =>
     //return student is not null ? Results.Ok(student) : Results.NotFound();
 });
 
+app.MapPost("/products", async (IProductService service, Product product) =>
+{
+    await service.CreateAsync(product);
+    return Results.Created($"/products/{product.ProductId}", product);
+});
+
+
 app.Run();
 
 

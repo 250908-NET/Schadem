@@ -6,7 +6,8 @@ namespace Store.Models;
 
 public class Order
 {
-    public int Id { get; set; }
+    [Key]
+    public int OrderId { get; set; }
     public DateTime OrderDate { get; set; }
 
     // Foreign key to Customer

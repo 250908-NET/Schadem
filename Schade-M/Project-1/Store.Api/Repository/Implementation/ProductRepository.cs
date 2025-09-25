@@ -22,7 +22,10 @@ namespace Store.Repositories
         {
             //return await _context.Product.Where( student => student.id  == id);
             //return await _context.Products.FirstOrDefaultAsync(p => p.ProductId == id);
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            return await _context.Products
+                        .Include(p => p.Orders) // optional, only if you want orders loaded
+                        .FirstOrDefaultAsync(p => p.ProductId == id); // match the PK
         }
 
         public async Task AddAsync(Product product)

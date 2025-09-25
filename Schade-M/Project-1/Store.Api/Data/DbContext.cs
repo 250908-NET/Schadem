@@ -18,6 +18,10 @@ public class StoreDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<Order>()
+        .HasMany(o => o.Products)
+        .WithMany(p => p.Orders);
     }
 }
 
