@@ -33,6 +33,12 @@ namespace Store.Repositories
             await _context.Customers.AddAsync(customer);
         }
 
+        public async Task DeleteAsync(Customer customer)
+        {
+            _context.Customers.Remove(customer);
+            await Task.CompletedTask; 
+        }
+
         public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();

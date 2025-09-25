@@ -7,6 +7,7 @@ namespace Store.Repositories
         public Task<List<Customer>> GetAllAsync();
         public Task<Customer?> GetByIdAsync(int id);
         public Task AddAsync(Customer customer);
+        public Task DeleteAsync(Customer customer);
         public Task SaveChangesAsync();
     }
 }

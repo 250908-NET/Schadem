@@ -6,6 +6,7 @@ namespace Store.Services
     {
         public Task<List<Customer>> GetAllAsync();
         public Task<Customer?> GetByIdAsync(int id);
+        public Task DeleteAsync(Customer customer);
         public Task CreateAsync(Customer customer);
     }
 }

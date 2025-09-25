@@ -138,14 +138,14 @@ app.MapGet("/customers/{id}", async (ICustomerService service, int id) =>
    //return student is not null ? Results.Ok(student) : Results.NotFound();
 });
 
-// app.MapDelete("/customers/{id}", async (IOrderService service, int id) =>
-// {
-//     var order = await service.GetByIdAsync(id);
-//     if (order == null) return Results.NotFound();
+app.MapDelete("/customers/{id}", async (ICustomerService service, int id) =>
+{
+    var customer = await service.GetByIdAsync(id);
+    if (customer == null) return Results.NotFound();
 
-//     await service.DeleteAsync(order);
-//     return Results.NoContent(); // 204 No Content
-// });
+    await service.DeleteAsync(customer);
+    return Results.NoContent(); // 204 No Content
+});
 //---------------------------------------------------------------
 
 app.Run();
